@@ -1,0 +1,24 @@
+[linux]
+#lin02 ansible_host=192.168.1.204 
+lin03 ansible_host=192.168.1.205 
+lin04 ansible_host=192.168.1.206 
+
+[windows]
+win01 ansible_host=192.168.1.202
+
+[windows:vars]
+ansible_user = administrator
+ansible_password = Password123
+ansible_port=5986
+ansible_connection = winrm
+ansible_winrm_server_cert_validation = ignore
+
+[linux:vars]
+ansible_connection=ssh
+ansible_user=root
+ansible_password=Password123
+ansible_python_interpreter=/usr/bin/python2.7
+
+
+
+

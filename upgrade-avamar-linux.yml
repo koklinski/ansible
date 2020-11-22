@@ -1,0 +1,6 @@
+---
+
+- hosts: linux
+  roles:
+  - upgrade-avamar-linux
+

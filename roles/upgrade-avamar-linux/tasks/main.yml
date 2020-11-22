@@ -1,0 +1,58 @@
+---
+# tasks file for upgrade-avamar-linux
+
+  - block:
+    - name: Create temp directory Linux
+      file:
+       path: "{{ temp_directory_linux }}"
+       state: directory
+    when: ansible_facts['os_family'] == "RedHat"
+
+  - block:
+    - name: Copy files Linux x86
+      copy:
+       src: "{{ temp_directory_agents }}/{{ agent_linux_x86 }}"
+       dest: "{{ temp_directory_linux }}/AvamarClient-linux-sles11-x86-19.1.100-38.rpm"
+
+    when: ansible_facts['os_family'] == "RedHat" and ansible_facts['userspace_bits'] == "32"
+
+
+  - block:
+    - name: Copy files Linux x64
+      copy:
+       src: "{{ temp_directory_agents }}/{{ agent_linux_x64 }}"
+       dest: "{{ temp_directory_linux }}/AvamarClient-linux-sles11-x86_64-19.1.100-38.rpm"
+
+    when: ansible_facts['os_family'] == "RedHat" and ansible_facts['userspace_bits'] == "64"
+
+  - block:
+    - name: Stop service avagent, if started
+      service:
+       name: avagent
+       state: stopped
+    when: ansible_facts['os_family'] == "RedHat" 
+
+
+  - block:
+    - name: Upgrade agent on Linux x86
+      yum:
+       name: "{{ temp_directory_linux }}/AvamarClient-linux-sles11-x86-19.1.100-38.rpm"
+       state: present
+    when: ansible_facts['os_family'] == "RedHat" and ansible_facts['userspace_bits'] == "32"
+
+
+  - block:
+    - name: Upgrade  agent on Linux x64
+      yum:
+       name: "{{ temp_directory_linux }}/AvamarClient-linux-sles11-x86_64-19.1.100-38.rpm"
+       state: present
+    when: ansible_facts['os_family'] == "RedHat" and ansible_facts['userspace_bits'] == "64"
+
+  - block:
+    - name: Start service avagent, if stopped
+      service:
+       name: avagent
+       state: started
+    when: ansible_facts['os_family'] == "RedHat"
+
+

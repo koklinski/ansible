@@ -1,0 +1,7 @@
+---
+# vars file for install-avamar-linux
+
+    temp_directory_agents: /tmp/agents
+    temp_directory_linux: /tmp/agents
+    agent_linux_x86: SLES11/AvamarClient-linux-sles11-x86-19.1.100-38.rpm
+    agent_linux_x64: SLES11-X86_64/AvamarClient-linux-sles11-x86_64-19.1.100-38.rpm

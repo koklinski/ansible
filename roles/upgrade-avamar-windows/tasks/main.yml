@@ -1,0 +1,59 @@
+---
+# tasks file for upgrade-avamar-windows
+
+  - block:
+    - name: Create temp directory Windows
+      win_file:
+       path: "{{ temp_directory_windows }}"
+       state: directory
+    when: ansible_facts['os_family'] == "Windows"
+
+  - block:  
+    - name: Copy files Windows x86
+      win_copy:
+       src: "{{ temp_directory_agents }}/{{ agent_windows_x86 }}" 
+       dest: "{{ temp_directory_windows }}/AvamarClient-windows-x86-19.1.100-38.msi" 
+       
+    when: ansible_facts['os_family'] == "Windows" and ansible_facts['architecture'] == "32-bit"
+
+
+  - block:
+    - name: Copy files Windows x64
+      win_copy:
+       src: "{{ temp_directory_agents }}/{{ agent_windows_x64 }}"
+       dest: "{{ temp_directory_windows }}/AvamarClient-windows-x86_64-19.1.100-38.msi"
+
+    when: ansible_facts['os_family'] == "Windows" and ansible_facts['architecture'] == "64-bit"
+
+  - block:
+    - name: Disabling avbackup
+      win_service:
+       name: avbackup
+       state: stopped
+    when: ansible_facts['os_family'] == "Windows"
+
+
+  - block:
+    - name: Upgrade  agent Windows x86
+      win_package:
+       path: '{{ temp_directory_windows }}\AvamarClient-windows-x86-19.1.100-38.msi'
+       product_id: '{17355BD2-42EC-4B34-B923-F1A1F6436435}'
+       state: present
+    when: ansible_facts['os_family'] == "Windows" and ansible_facts['architecture'] == "32-bit"
+
+
+  - block:
+    - name: Upgrade agent Windows x64
+      win_package:
+       path: '{{ temp_directory_windows }}\AvamarClient-windows-x86_64-19.1.100-38.msi'
+       product_id: '{58A8A611-2F5B-4C1B-BC25-6AEEBC0D6BF7}'
+       state: present
+    when: ansible_facts['os_family'] == "Windows" and ansible_facts['architecture'] == "64-bit"
+  - block:
+    - name: Enabling avbackup
+      win_service:
+       name: avbackup
+       state: started
+    when: ansible_facts['os_family'] == "Windows"
+
+

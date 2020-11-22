@@ -1,0 +1,6 @@
+---
+- name: Installation and registration avamar agents on Windows
+  hosts: win
+  connection: winrm
+  roles:
+   - install-avamar-windows

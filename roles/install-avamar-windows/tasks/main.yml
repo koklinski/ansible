@@ -1,0 +1,49 @@
+---
+# tasks file for install-avamar-windows
+
+  - block:
+    - name: Create temp directory Windows
+      win_file:
+       path: "{{ temp_directory_windows }}"
+       state: directory
+    when: ansible_facts['os_family'] == "Windows"
+
+  - block:  
+    - name: Copy files Windows x86
+      win_copy:
+       src: "{{ temp_directory_agents }}/{{ agent_windows_x86 }}" 
+       dest: "{{ temp_directory_windows }}/AvamarClient-windows-x86-19.1.100-38.msi" 
+       
+    when: ansible_facts['os_family'] == "Windows" and ansible_facts['architecture'] == "32-bit"
+
+
+  - block:
+    - name: Copy files Windows x64
+      win_copy:
+       src: "{{ temp_directory_agents }}/{{ agent_windows_x64 }}"
+       dest: "{{ temp_directory_windows }}/AvamarClient-windows-x86_64-18.2.100-134.msi"
+
+    when: ansible_facts['os_family'] == "Windows" and ansible_facts['architecture'] == "64-bit"
+
+  - block:
+    - name: Installation agent Windows x86
+      win_package:
+       path: '{{ temp_directory_windows }}\AvamarClient-windows-x86-19.1.100-38.msi'
+       product_id: '{17355BD2-42EC-4B34-B923-F1A1F6436435}'
+       state: present
+    when: ansible_facts['os_family'] == "Windows" and ansible_facts['architecture'] == "32-bit"
+
+
+  - block:
+    - name: Installation agent Windows x64
+      win_package:
+       path: '{{ temp_directory_windows }}\AvamarClient-windows-x86_64-18.2.100-134.msi'
+       product_id: '{BFD4F31B-0B2D-4A41-A8B4-7BC7F9689EBF}'
+       state: present
+    when: ansible_facts['os_family'] == "Windows" and ansible_facts['architecture'] == "64-bit"
+
+  - block:
+    - name: Registration agent Windows
+      win_shell: "{{ windows_bin_path }} {{ avamar_server }} {{ avamar_domain }}"
+      
+    when: ansible_facts['os_family'] == "Windows"

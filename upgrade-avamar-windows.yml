@@ -1,0 +1,6 @@
+---
+- name: Upgrade  avamar agents on Windows
+  hosts: win
+  connection: winrm
+  roles:
+   - upgrade-avamar-windows

@@ -1,0 +1,6 @@
+---
+
+temp_directory_agents: /tmp/agents
+temp_directory_windows: 'C:\Temp'
+agent_windows_x86: WIN32/AvamarClient-windows-x86-19.1.100-38.msi
+agent_windows_x64: WIN64/AvamarClient-windows-x86_64-19.1.100-38.msi
